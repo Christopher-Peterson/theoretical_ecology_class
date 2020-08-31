@@ -44,7 +44,7 @@ exp_lambda_results = recursive_sequence(.func = exponential_step,
 # Create logistic sequence function
 logistic_seq = partial(recursive_sequence, .func = logistic_step)
 # range of r & K values to test
-r_range = seq(-1, 2, by = .1)
+r_range = c(0, 0.2, 0.5, 1, 1.5, 2, 2.2, 2.6, 3.2)
 K_range = 10^seq(0.5, 3.5, by = .25)
 logistic_r_results = logistic_seq(r = r_range)
 logistic_K_results = logistic_seq(K = K_range)
@@ -64,8 +64,15 @@ K_plot = ggplot(logistic_K_results) +
   geom_line() + 
   scale_color_viridis_c(trans = "log10") + 
   scale_y_log10()
-r_plot = ggplot(logistic_r_results) + 
-  aes(x = t, y = N, group = r, color = r) + 
-  geom_line() + 
+r_plot = 
+  logistic_r_results %>% 
+  # r = 3.2 causes problems (e.g., infinite & negative N values)
+  filter(!is.infinite(N), N>0) %>% 
+  ggplot()+
+  aes(x = t, y = N, group = r, color = r) +
+  geom_line() +
   scale_color_viridis_c()
-  
+
+lambda_plot
+K_plot
+r_plot
