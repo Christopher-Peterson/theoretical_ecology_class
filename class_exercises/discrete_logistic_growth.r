@@ -73,6 +73,7 @@ r_plot =
   geom_line() +
   scale_color_viridis_c()
 
+# Run to display plots
 lambda_plot
 K_plot
 r_plot
